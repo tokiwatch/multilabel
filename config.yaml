@@ -1,0 +1,104 @@
+id: multilabel
+key: MT::Plugin::Multilabel
+name: Multilabel
+version: 0.1
+description: <MT_TRANS phrase='description of Multilabel'>
+doc_link: http://m-logic.co.jp/mt-plugins/mt-multilabel/docs/mt-multilabel.html
+author_name: Takuji Tokiwa
+author_link: http://www.allianceport.jp/
+l10n_class: Multilabel::L10N
+schema_version: 0.01
+object_types:
+    multilabel: Multilabel::Object
+listing_screens:
+    multilabel:
+        primary: value
+        screen_label: multilabel
+        object_label: multilabel
+        object_label_plural: multilabels
+        default_sort_key: id
+        view:
+            - system
+            - website
+            - blog
+        scope_mode: wide
+        condition: sub { return 1 }
+list_properties:
+    multilabel:
+        id:
+            auto: 1
+            label: ID
+            order: 10
+            display: force
+            default_sort_order: aescend
+        class:
+            auto: 1
+            label: Class
+            order: 11
+            display: force
+            default_sort_order: aescend
+            html_link: $Multilabel::Multilabel::CMS::html_link
+        text:
+            auto: 1
+            label: Text
+            order: 12
+            html_link: $Multilabel::Multilabel::List::html_link
+
+list_actions:
+    multilabel:
+        delete:
+            label: Delete
+            code: $Multilabel::Multilabel::List::delete
+            order: 100
+            js_message: delete
+            button: 1
+applications:
+    cms:
+        menus:
+            multilabel:
+                label: Multilabel
+                order: 410
+            multilabel:list:
+                label: Manage
+                order: 1
+                view:
+                    - system
+                    - website
+                    - blog
+                mode: list
+                args:
+                    _type: multilabel
+                condition: sub { return 1 }
+            multilabel:view:
+                label: New
+                order: 2
+                view:
+                    - system
+                    - website
+                    - blog
+                mode: multilabel_view
+                args:
+                    _type: multilabel
+                condition: sub { return 1 }
+        compose_menus:
+            compose_menus:
+                menus:
+                    stickies:new:
+                        label: Multilabel
+                        order: 250
+                        view:
+                            - website
+                            - blog
+                        mode: multilabel_view
+                        args:
+                            _type: multilabel
+                        condition: sub { return 1}
+        methods:
+            multilabel_view: $Multilabel::Multilabel::CMS::view
+            multilabel_save: $Multilabel::Multilabel::CMS::save
+            multilabel_delete: $Multilabel::Multilabel::CMS::delete
+tags:
+    function:
+        MultilabelId: $Multilabel::Multilabel::ContextHandlers::hdlr_tag_id
+    block:
+        Multilabel: $Multilabel::Multilabel::ContextHandlers::hdlr_container

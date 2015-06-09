@@ -1,0 +1,142 @@
+<mt:if name="new_object">
+    <mt:setvar name="page_title" value="<__trans phrase="Create Multilabel">" />
+<mt:Else>
+    <mt:setvar name="page_title" value="<__trans phrase="Edit Multilabel">" />
+</mt:if>
+
+<mt:setvarblock name="system_msg">
+<div id="msg-block">
+<mt:if name="saved">
+  <mtapp:statusmsg
+     id="saved-added"
+     class="success">
+    <__trans phrase="This multilabel has been saved.">
+  </mtapp:statusmsg>
+</mt:if>
+<mt:if name="saved_changes">
+  <mtapp:statusmsg
+     id="saved-changes"
+     class="success">
+    <__trans phrase="Your changes have been saved.">
+  </mtapp:statusmsg>
+</mt:if>
+</div>
+</mt:setvarblock>
+
+
+<mt:setvarblock name="object_nav">
+<ul class="object-nav">
+<li id="previous-link">
+<mt:if name="prev_id"><a href="<mt:var name="prev_multilabel_uri">">&lsaquo; <__trans phrase="Prev"></a><mt:else><span>&lsaquo; <__trans phrase="Prev"></span></mt:if></li>
+<li id="next-link">
+<mt:if name="next_id"><a href="<mt:var name="next_multilabel_uri">"><__trans phrase="Next"> &rsaquo;</a><mt:else><span><__trans phrase="Next"> &rsaquo;</span></mt:if></li>
+  </ul>
+</mt:setvarblock>
+
+<mt:setvarblock name="form_header">
+<form name="multilabel_form" id="multilabel_form" method="post" action="<$mt:var name="script_url"$>">
+<mt:if name="new_object">
+  <input type="hidden" name="author_id" value="<$mt:var name="author_id" escape="html"$>" />
+<mt:else>
+  <input type="hidden" name="id" value="<$mt:var name="id" escape="html"$>" />
+</mt:if>
+  <input type="hidden" name="blog_id" value="<$mt:var name="blog_id" escape="html"$>" id="blog-id" />
+  <input type="hidden" name="__mode" value="multilabel_save" />
+  <input type="hidden" name="_type" value="<$mt:var name="object_type"$>" />
+  <input type="hidden" name="return_args" value="<$mt:var name="return_args" escape="html"$>" />
+  <input type="hidden" name="magic_token" value="<$mt:var name="magic_token"$>" id="m_t" />
+</mt:setvarblock>
+
+<mt:setvarblock name="related_content">
+<mtapp:widget
+   id="multilabel-status-widget"
+   class="status-widget"
+   label="<__trans phrase="Status">">
+   <ul>
+       <mt:if name="new_object">
+           <li><__trans phrase="New Object"></li>
+       <mt:else>
+           <li><__trans phrase="[_1] - Created by [_2]" params="<$mt:date ts="$created_on" relative="1" _default="$created_on_formatted" format="%b %e %Y"$>%%<$mt:var name="created_by" escape="html" $>"></li>
+           <mt:if name="modified_by">
+               <li><__trans phrase="[_1] - Edited by [_2]" params="<$MTDate ts="$modified_on" relative="1" _default="$modified_on_formatted" format="%b %e %Y"$>%%<$mt:var name="modified_by" escape="html" $>"></li>
+           </mt:if>
+       </mt:if>
+   </ul>
+</ul>
+</mtapp:widget>
+
+<mtapp:widget
+    id="multilabel-publishing-widget"
+    label="<__trans phrase="Publishing">">
+                <mt:setvar name="button_text" value="<__trans phrase="Save">">
+                <mt:setvarblock name="button_title"><__trans phrase="Save this Multilabel"></mt:setvarblock>
+
+<mtapp:setting
+    id="created_on"
+    label="<__trans phrase="Created on">"
+    label_class="top-label"
+    help_page="stickies"
+    help_section="date">
+    <div class="date-time-fields">
+        <input type="text" id="created_on" class="text date text-date<mt:if name="status_future"><mt:if name="can_publish_post"> highlight</mt:if></mt:if>" name="created_on_date" value="<$mt:var name="created_on_date" escape="html"$>" /><span class="separator"> <__trans phrase="@"></span> <input type="text" class="text time <mt:if name="status_future"><mt:if name="can_publish_post"> highlight</mt:if></mt:if>" name="created_on_time" value="<$mt:var name="created_on_time" escape="html"$>" />
+    </div>
+</mtapp:setting>
+
+<div class="actions-bar">
+  <div class="save-action">
+    <button
+       name="status"
+       type="submit"
+       title="<mt:var name="button_title">"
+       class="publish action primary button">
+      <mt:var name="button_text">
+    </button>
+  </div>
+</div>
+
+<mt:if name="id">
+    <div class="delete-action last-child">
+        <div class="delete-action" style="text-align:right">
+            <a href="<mtapp:link mode="multilabel_delete" blog_id="$blog_id" id="$id">"><__trans phrase="Delete"></a>
+        </div>
+    </div>
+</mt:if>
+
+</mtapp:widget>
+
+
+
+</mt:setvarblock>
+
+<mt:include name="include/header.tmpl" />
+
+<mtapp:setting
+    id="key"
+    label="<__trans phrase="Key">"
+    label_class="no-header"
+    help_page="multilabel_key"
+    help_section="multilabel_key" >
+    <input
+        type="text"
+        name="key"
+        id="key"
+        class="title text full"
+        value="<$mt:var name="key" escape="html"$>"
+        placeholder="<__trans phrase="Key">" maxlength="255" />
+</mtapp:setting>
+
+<mtapp:setting
+    id="value"
+    label="<__trans phrase="Value">"
+    label_class="no-header"
+    help_page="multilabel_value"
+    help_section="multilabel_value" >
+    <div id="textarea-enclosure" class="editor">
+      <textarea name="value" id="value" class="monospace text full" tabindex="3" spellcheck="false" mt:editor="codemirror" mt:editor-options="lang:<mt:var name="template_lang"> autocomplete:off" ><mt:var name="value" escape="html"></textarea>
+    </div>
+</mtapp:setting>
+
+</form>
+
+
+<mt:include name="include/footer.tmpl" />
