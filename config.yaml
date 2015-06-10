@@ -8,7 +8,7 @@ author_name: Takuji Tokiwa
 author_link: http://www.allianceport.jp/
 l10n_class: Multilabel::L10N
 config_template: config_template.tmpl
-schema_version: 0.02
+schema_version: 0.03
 settings:
     multilabel_class:
         default: ja,en,cn,kr

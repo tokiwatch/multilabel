@@ -245,15 +245,15 @@ sub delete {
         require Multilabel::Object;
         my $object = Multilabel::Object->load( { id => $id, blog_id => $blog_id } ) or die;
 
-        require Multilabel::Object_data;
+        require Multilabel::ObjectData;
+        my @data = Multilabel::ObjectData->load( { multilabel_id => $id } ) or die;
 
-        my @data = Multilabel::Object_data->load({ multilabel_id => $id }) or die;
+        foreach my $e (@data) {
+            $e->remove or die;
+        }
 
-
-        # removeをまとめて処理できるかの確認が必要
-        #
-        #
         $object->remove or die;
+
         return $app->redirect(
             $app->uri(
                 'mode' => 'list',
@@ -266,4 +266,5 @@ sub delete {
     }
     1;
 }
+
 1;
