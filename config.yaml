@@ -7,9 +7,14 @@ doc_link: http://m-logic.co.jp/mt-plugins/mt-multilabel/docs/mt-multilabel.html
 author_name: Takuji Tokiwa
 author_link: http://www.allianceport.jp/
 l10n_class: Multilabel::L10N
-schema_version: 0.01
+config_template: config_template.tmpl
+schema_version: 0.02
+settings:
+    multilabel_class:
+        default: ja,en,cn,kr
 object_types:
     multilabel: Multilabel::Object
+    multilabel_data: Multilabel::ObjectData
 listing_screens:
     multilabel:
         primary: value
@@ -29,21 +34,14 @@ list_properties:
             auto: 1
             label: ID
             order: 10
-            display: force
             default_sort_order: aescend
-        class:
+        keyword:
             auto: 1
-            label: Class
+            label: Keyword
             order: 11
             display: force
             default_sort_order: aescend
-            html_link: $Multilabel::Multilabel::CMS::html_link
-        text:
-            auto: 1
-            label: Text
-            order: 12
             html_link: $Multilabel::Multilabel::List::html_link
-
 list_actions:
     multilabel:
         delete:
@@ -83,10 +81,11 @@ applications:
         compose_menus:
             compose_menus:
                 menus:
-                    stickies:new:
+                    multilabels:new:
                         label: Multilabel
                         order: 250
                         view:
+                            - system
                             - website
                             - blog
                         mode: multilabel_view

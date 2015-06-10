@@ -111,30 +111,43 @@
 <mt:include name="include/header.tmpl" />
 
 <mtapp:setting
-    id="key"
-    label="<__trans phrase="Key">"
+    id="keyword"
+    label="<__trans phrase="Keyword">"
     label_class="no-header"
-    help_page="multilabel_key"
-    help_section="multilabel_key" >
+    help_page="multilabel_keyword"
+    help_section="multilabel_keyword" >
     <input
         type="text"
-        name="key"
-        id="key"
+        name="keyword"
+        id="keyword"
         class="title text full"
-        value="<$mt:var name="key" escape="html"$>"
-        placeholder="<__trans phrase="Key">" maxlength="255" />
+        value="<mt:var name="keyword">"
+        placeholder="<__trans phrase="Keyword">" />
 </mtapp:setting>
 
+
+<mt:Loop name="multilabel_data" sort_by="key">
+
+<div id="<mt:getvar name="__key__">">
+<h1 class="title page first-child"><mt:getvar name="__key__"></h1>
+
 <mtapp:setting
-    id="value"
-    label="<__trans phrase="Value">"
-    label_class="no-header"
-    help_page="multilabel_value"
-    help_section="multilabel_value" >
-    <div id="textarea-enclosure" class="editor">
-      <textarea name="value" id="value" class="monospace text full" tabindex="3" spellcheck="false" mt:editor="codemirror" mt:editor-options="lang:<mt:var name="template_lang"> autocomplete:off" ><mt:var name="value" escape="html"></textarea>
+    id="<mt:getvar name="__key__">"
+    label="<mt:getvar name="__key__">"
+    label_class="no-header" >
+    <div id="textarea-enclosure">
+        <textarea
+            name="<mt:getvar name="__key__">"
+            id="<mt:getvar name="__key__">"
+            class="text low full"
+            autocomplete:off" 
+            placeholder="<mt:getvar name="__key__"> <__trans phrase="is inputed.">" ><mt:var name="__value__"></textarea>
     </div>
 </mtapp:setting>
+
+</div>
+
+</mt:loop>
 
 </form>
 

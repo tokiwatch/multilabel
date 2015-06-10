@@ -13,12 +13,13 @@ use vars qw( %Lexicon );
 
     'Multilabel'   => 'ラベル',
     'multilabel'   => 'ラベル',
-    'Stickies' => 'ラベル',
-    'stickies' => 'ラベル',
-
-    'Class' => 'クラス',
+    'Multilabels' => 'ラベル',
+    'multilabels' => 'ラベル',
+    'keyword' => 'キーワード',
+    'Keyword' => 'キーワード',
+    'Class' => '分類',
     'Text' => '値',
-
+    'is inputed.' => 'を入力してください。',
     'Create Multilabel' => 'ラベルの作成',
     'Edit Multilabel'   => 'ラベルの編集',
     'Status' => '情報',
