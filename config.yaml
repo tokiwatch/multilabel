@@ -8,7 +8,7 @@ author_name: Takuji Tokiwa
 author_link: http://www.allianceport.jp/
 l10n_class: Multilabel::L10N
 config_template: config_template.tmpl
-schema_version: 0.03
+schema_version: 0.04
 settings:
     multilabel_class:
         default: ja,en,cn,kr
@@ -17,7 +17,7 @@ object_types:
     multilabel_data: Multilabel::ObjectData
 listing_screens:
     multilabel:
-        primary: value
+        primary: keyword
         screen_label: multilabel
         object_label: multilabel
         object_label_plural: multilabels
@@ -42,6 +42,12 @@ list_properties:
             display: force
             default_sort_order: aescend
             html_link: $Multilabel::Multilabel::List::html_link
+        class:
+            auto: 1
+            label: class
+            order: 12
+            display: force
+            default_sort_order: aescend
 list_actions:
     multilabel:
         delete:
@@ -98,6 +104,6 @@ applications:
             multilabel_delete: $Multilabel::Multilabel::CMS::delete
 tags:
     function:
-        MultilabelId: $Multilabel::Multilabel::ContextHandlers::hdlr_tag_id
+        MultilabelText: $Multilabel::Multilabel::ContextHandlers::hdlr_tag
     block:
         Multilabel: $Multilabel::Multilabel::ContextHandlers::hdlr_container

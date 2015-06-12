@@ -17,6 +17,12 @@ sub html_link {
     );
 }
 
+sub defined_class_list {
+    my $prop = shift;
+    my ( $obj, $app, $opts ) = @_;
+    return $obj->id;
+}
+
 sub delete {
     my $app = shift;
     $app->validate_magic or return;

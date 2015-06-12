@@ -4,137 +4,106 @@ package Multilabel::ContextHandlers;
 
 use strict;
 use warnings;
+use Multilabel::Plugin;
+use Multilabel::Plugin qw( multilabel_class );
 
 #----- Tags
 sub hdlr_container {
-    my ($ctx, $args, $cond) = @_;
+    my ( $ctx, $args, $cond ) = @_;
     my $builder = $ctx->stash('builder');
-    my $tokens = $ctx->stash('tokens');
-    my %term;
-    $term{id} = $args->{'id'} if ($args->{'id'});
+    my $tokens  = $ctx->stash('tokens');
+    my $class   = $args->{'class'} if ( $args->{'class'} );
 
-    if ($args->{'blog_id'}) {
-        $term{blog_id} = $args->{'blog_id'};
-    }
-    else{
-        $term{blog_id} = $ctx->stash('blog_id');
-    }
-
-    $term{key} = $args->{'key'} if ($args->{'key'});
-
-    my %params;
-    $params{sort} = 'id';
-    $params{direction}= "aescend";
-    if ($args->{'last'}){
-        $params{limit} = $args->{'last'};
-    }
-    else {
-        $params{limit} = "10";
-    }
-
-    require Multilabel::Object;
-    my @stickies = Multilabel::Object->load( \%term,\%params);
     my $out = '';
-    foreach my $q (@stickies){
-        local $ctx->{__stash}->{stickies}=$q;
-        $out .= $builder->build($ctx, $tokens);
-    }
+    $ctx->{__stash}->{multilabel_class} = $class;
+    $out .= $builder->build( $ctx, $tokens );
     return $out;
 }
 
-sub hdlr_tag_id {
-    my ($ctx, $args) = @_;
-    my $row = $ctx->stash('stickies');
-    return $row->id;
-}
+sub hdlr_tag {
+    my ( $ctx, $args ) = @_;
 
-sub hdlr_tag_blog_id {
-    my ($ctx, $args) = @_;
-    my $row = $ctx->stash('stickies');
-    return $row->blog_id;
-}
+    my $blog    = $ctx->stash('blog') or die;
+    my $keyword = $args->{'keyword'}  or die;
 
-sub hdlr_tag_key {
-    my ($ctx, $args) = @_;
-    my $row = $ctx->stash('stickies');
-    return $row->key;
-}
+    my $class;
 
-sub hdlr_tag_value {
-    my ($ctx, $args) = @_;
-    my $row;
-    if ($ctx->stash('stickies')) {
-        $row = $ctx->stash('stickies');
+    if ( $args->{'class'} ) {
+        $class = $args->{'class'};
     }
     else {
-        if ($args->{'key'}) {
-            my %term;
-            $term{key} = $args->{'key'};
-            if ($args->{'blog_id'}) {
-                $term{blog_id} = scalar $args->{'blog_id'};
-            }
-            else {
-                $term{blog_id} = scalar $ctx->stash('blog_id');
-            }
-            require Multilabel::Object;
-            $row = Multilabel::Object->load(\%term);
-            unless ($row){
-                if ($args->{'parent'}) {
-                    if (scalar $args->{'parent'}) {
-                        require MT::Blog;
-                        my $blog = MT::Blog->load({ id => scalar $ctx->stash('blog_id') });
-                        $term{blog_id} = scalar $blog->parent_id;
-                        $row = Multilabel::Object->load(\%term);
-                    }
+        $class = $ctx->stash('multilabel_class') or die;
+    }
+
+    if ($class) {
+        my $t = _transform( $keyword, $class, $blog ) or undef;
+        return $t or $keyword;
+    }
+
+    1;
+
+}
+
+sub _transform {
+    my ( $keyword, $class, $blog ) = @_;
+
+    my $blog_id;
+
+    if   ($blog) { $blog_id = $blog->id; }
+    else         { $blog_id = 0; }
+
+    require Multilabel::Object;
+    require Multilabel::ObjectData;
+
+    #わたってきたclassが使用可能なものかを判定する。
+    my $class_list = multilabel_class($blog_id);
+
+    my $multilabel;
+
+    foreach my $e (@$class_list) {
+        if ( $e eq $class ) {
+            $multilabel = Multilabel::Object->load(
+                {   keyword => $keyword,
+                    blog_id => $blog_id
                 }
-            }
-            unless ($row) {
-                $term{blog_id} = 0;
-                $row = Multilabel::Object->load(\%term);
-            }
+            );
         }
     }
-    if ($row) {
-        return $row->value;
+
+    my $value;
+
+    if ($multilabel) {
+        my $multilabel_id = $multilabel->id;
+
+        my $multilabel_data = Multilabel::ObjectData->load(
+            {   multilabel_id => $multilabel_id,
+                class         => $class
+            }
+        ) or undef;
+
+        if ($multilabel_data) {
+            $value = $multilabel_data->value if ( $multilabel_data->value );
+        }
+    }
+
+    if ($value) {
+        return $value;
     }
     else {
-        return;
+        if ( $blog_id eq 0 ) {
+            return $keyword;
+        }
+        else {
+            my $parent_id = $blog->parent_id or 0;
+
+            require MT::Blog;
+            my $parent_blog = MT::Blog->load( { id => $parent_id } ) or undef;
+            my $t = _transform( $keyword, $class, $parent_blog ) or undef;
+
+            return $t or $keyword;
+        }
     }
     1;
-}
-
-sub hdlr_tag_created_date {
-    my ($ctx, $args) = @_;
-    my $format;
-    if ($args->{'format'}){
-        $format = $args->{'format'};
-    }
-    else {
-        $format = "%b. %e, %Y";
-    }
-    my $row = $ctx->stash('stickies');
-    use MT::Util qw( format_ts );
-    return format_ts($format,$row->created_on);
-}
-
-sub hdlr_tag_modified_date {
-    my ($ctx, $args) = @_;
-    my $format;
-    if ($args->{'format'}){
-        $format = $args->{'format'};
-    }
-    else {
-        $format = "%b. %e, %Y";
-    }
-    my $row = $ctx->stash('stickies');
-    use MT::Util qw( format_ts );
-    return format_ts($format,$row->modified_on);
-}
-
-sub hdlr_tag_author_id {
-    my ($ctx, $args) = @_;
-    my $row = $ctx->stash('stickies');
-    return $row->created_by;
 }
 
 1;

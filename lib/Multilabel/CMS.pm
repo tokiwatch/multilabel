@@ -97,7 +97,12 @@ sub view {
         my %multilabel_data_value;
 
         foreach my $each_class (@$class) {
-            my $multilabel_data = Multilabel::ObjectData->load( { multilabel_id => $id, class => $each_class } ) or undef;
+            my $multilabel_data = Multilabel::ObjectData->load(
+                {   multilabel_id => $id,
+                    class         => $each_class
+                }
+            ) or undef;
+
             if ($multilabel_data) {
                 $multilabel_data_value{$each_class} = $multilabel_data->value;
             }
@@ -165,6 +170,16 @@ sub save {
 
     my $class = multilabel_class($blog_id);
 
+    my @defined_class;
+
+    foreach my $e (@$class) {
+        if ( $q->param($e) ) {
+            push( @defined_class, $e );
+        }
+    }
+    my @sorted_defined_class = sort(@defined_class);
+    my $sorted_defined_class_string = join( ",", @sorted_defined_class );
+
     require Multilabel::Object;
     require Multilabel::ObjectData;
 
@@ -177,13 +192,19 @@ sub save {
 
         my $multilabel = Multilabel::Object->load($id);
         $multilabel->keyword( $q->param('keyword') ) if $q->param('keyword');
+        $multilabel->class($sorted_defined_class_string);
         $multilabel->modified_on($ts);
         $multilabel->created_on($co);
         $multilabel->modified_by( $author->id );
         $multilabel->save;
 
         foreach my $each_class (@$class) {
-            my $multilabel_data = Multilabel::ObjectData->load( { multilabel_id => $id, class => $each_class } ) or undef;
+            my $multilabel_data = Multilabel::ObjectData->load(
+                {   multilabel_id => $id,
+                    class         => $each_class
+                }
+            ) or undef;
+
             if ($multilabel_data) {
                 $multilabel_data->value( $q->param($each_class) );
                 $multilabel_data->save;
@@ -243,7 +264,11 @@ sub delete {
 
     if ($id) {
         require Multilabel::Object;
-        my $object = Multilabel::Object->load( { id => $id, blog_id => $blog_id } ) or die;
+        my $object = Multilabel::Object->load(
+            {   id      => $id,
+                blog_id => $blog_id
+            }
+        ) or die;
 
         require Multilabel::ObjectData;
         my @data = Multilabel::ObjectData->load( { multilabel_id => $id } ) or die;
