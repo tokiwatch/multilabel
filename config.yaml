@@ -3,7 +3,6 @@ key: MT::Plugin::Multilabel
 name: Multilabel
 version: 0.1
 description: <MT_TRANS phrase='description of Multilabel'>
-doc_link: http://m-logic.co.jp/mt-plugins/mt-multilabel/docs/mt-multilabel.html
 author_name: Takuji Tokiwa
 author_link: http://www.allianceport.jp/
 l10n_class: Multilabel::L10N

@@ -230,6 +230,7 @@ sub save {
 
         my $multilabel = Multilabel::Object->new();
         $multilabel->keyword( $q->param('keyword') ) if $q->param('keyword');
+        $multilabel->class($sorted_defined_class_string);
         $multilabel->blog_id($blog_id);
         $multilabel->created_by( $author->id );
         $multilabel->modified_by( $author->id );
