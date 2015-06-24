@@ -32,6 +32,7 @@ sub view {
         my %term;
         require Multilabel::Object;
         my $multilabel = Multilabel::Object->load($id);
+        $tmpl->param( 'title'      => $multilabel->title );
         $tmpl->param( 'keyword'    => $multilabel->keyword );
         $tmpl->param( 'created_on' => $multilabel->created_on );
         my $created_by_id  = $multilabel->created_by;
@@ -191,6 +192,7 @@ sub save {
         $co =~ s/\D//g;
 
         my $multilabel = Multilabel::Object->load($id);
+        $multilabel->title( $q->param('title') )     if $q->param('title');
         $multilabel->keyword( $q->param('keyword') ) if $q->param('keyword');
         $multilabel->class($sorted_defined_class_string);
         $multilabel->modified_on($ts);
@@ -229,6 +231,7 @@ sub save {
         $co =~ s/\D//g;
 
         my $multilabel = Multilabel::Object->new();
+        $multilabel->title( $q->param('title') )   if $q->param('title');
         $multilabel->keyword( $q->param('keyword') ) if $q->param('keyword');
         $multilabel->class($sorted_defined_class_string);
         $multilabel->blog_id($blog_id);

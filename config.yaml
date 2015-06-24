@@ -1,13 +1,13 @@
 id: multilabel
 key: MT::Plugin::Multilabel
 name: Multilabel
-version: 0.1
+version: 0.2
 description: <MT_TRANS phrase='description of Multilabel'>
 author_name: Takuji Tokiwa
 author_link: http://www.allianceport.jp/
 l10n_class: Multilabel::L10N
 config_template: config_template.tmpl
-schema_version: 0.04
+schema_version: 0.06
 settings:
     multilabel_class:
         default: ja,en,cn,kr
@@ -16,7 +16,7 @@ object_types:
     multilabel_data: Multilabel::ObjectData
 listing_screens:
     multilabel:
-        primary: keyword
+        primary: title
         screen_label: multilabel
         object_label: multilabel
         object_label_plural: multilabels
@@ -34,17 +34,24 @@ list_properties:
             label: ID
             order: 10
             default_sort_order: aescend
+        title:
+            auto: 1
+            label: Title
+            order: 11
+            display: force
+            default_sort_order: aescend
+            html_link: $Multilabel::Multilabel::List::html_link
         keyword:
             auto: 1
             label: Keyword
-            order: 11
+            order: 12
             display: force
             default_sort_order: aescend
             html_link: $Multilabel::Multilabel::List::html_link
         class:
             auto: 1
             label: class
-            order: 12
+            order: 13
             display: force
             default_sort_order: aescend
 list_actions:

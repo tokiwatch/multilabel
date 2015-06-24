@@ -11,9 +11,10 @@ __PACKAGE__->install_properties(
     {
         column_defs => {
             'id'      => 'integer not null auto_increment',
-            'keyword' => 'text',
+            'keyword' => 'text not null',
             'blog_id' => 'integer not null',
-            'class'   => 'string(255)'
+            'class'   => 'string(255)',
+            'title'   => 'text not null',
         },
         indexes => {
             'id'      => 1,

@@ -110,6 +110,29 @@
 
 <mt:include name="include/header.tmpl" />
 
+<div id="title">
+<h1 class="title page first-child"><__trans phrase="Title"></h1>
+
+<mtapp:setting
+    id="title"
+    label="<__trans phrase="Title">"
+    label_class="no-header"
+    help_page="multilabel_title"
+    help_section="multilabel_title" >
+    <input
+        type="text"
+        name="title"
+        id="title"
+        class="title text full"
+        value="<mt:var name="title">"
+        placeholder="<__trans phrase="Title">" />
+</mtapp:setting>
+
+</div>
+
+<div id="keyword">
+<h1 class="title page first-child"><__trans phrase="Keyword"></h1>
+
 <mtapp:setting
     id="keyword"
     label="<__trans phrase="Keyword">"
@@ -125,6 +148,7 @@
         placeholder="<__trans phrase="Keyword">" />
 </mtapp:setting>
 
+</div>
 
 <mt:Loop name="multilabel_data" sort_by="key">
 
@@ -140,7 +164,7 @@
             name="<mt:getvar name="__key__">"
             id="<mt:getvar name="__key__">"
             class="text low full"
-            autocomplete:off" 
+            autocomplete:off"
             placeholder="<mt:getvar name="__key__"> <__trans phrase="is inputed.">" ><mt:var name="__value__"></textarea>
     </div>
 </mtapp:setting>
