@@ -110,13 +110,15 @@
 
 <mt:include name="include/header.tmpl" />
 
+<mt:Ignore>
 <div id="title">
 <h1 class="title page first-child"><__trans phrase="Title"></h1>
+</mt:Ignore>
 
 <mtapp:setting
     id="title"
     label="<__trans phrase="Title">"
-    label_class="no-header"
+    label_class="field field-top-label"
     help_page="multilabel_title"
     help_section="multilabel_title" >
     <input
@@ -128,15 +130,18 @@
         placeholder="<__trans phrase="Title">" />
 </mtapp:setting>
 
+<mt:Ignore>
+
 </div>
 
 <div id="keyword">
 <h1 class="title page first-child"><__trans phrase="Keyword"></h1>
+</mt:Ignore>
 
 <mtapp:setting
     id="keyword"
     label="<__trans phrase="Keyword">"
-    label_class="no-header"
+    label_class="field field-top-label"
     help_page="multilabel_keyword"
     help_section="multilabel_keyword" >
     <input
@@ -148,17 +153,21 @@
         placeholder="<__trans phrase="Keyword">" />
 </mtapp:setting>
 
+<mt:Ignore>
 </div>
+</mt:Ignore>
 
 <mt:Loop name="multilabel_data" sort_by="key">
 
+<mt:Ignore>
 <div id="<mt:getvar name="__key__">">
 <h1 class="title page first-child"><mt:getvar name="__key__"></h1>
+</mt:Ignore>
 
 <mtapp:setting
     id="<mt:getvar name="__key__">"
     label="<mt:getvar name="__key__">"
-    label_class="no-header" >
+    label_class="field field-top-label" >
     <div id="textarea-enclosure">
         <textarea
             name="<mt:getvar name="__key__">"
@@ -169,8 +178,9 @@
     </div>
 </mtapp:setting>
 
+<mt:Ignore>
 </div>
-
+</mt:Ignore>
 </mt:loop>
 
 </form>
