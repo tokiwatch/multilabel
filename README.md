@@ -52,7 +52,7 @@ Multilabel（ブロックタグ）を使わず、直接MultilabelTextタグを�
 
 ## 例
 
-### ブロックタグを使用してclassを指定し、その中でファンクションタグで呼び出す。
+ブロックタグを使用してclassを指定し、その中でファンクションタグで呼び出す。
 
 ```
 <mt:Multilabel class="ja">
