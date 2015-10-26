@@ -9,7 +9,7 @@ use vars qw( %Lexicon );
 ## The following is the translation table.
 
 %Lexicon = (
-    'description of Multilabel' => 'Multilabelの説明',
+    'description of Multilabel' => 'Multilabelはテンプレートタグをつうじて、スニペットを呼び出すことができるプラグインです。',
 
     'Multilabel'   => 'ラベル',
     'multilabel'   => 'ラベル',
