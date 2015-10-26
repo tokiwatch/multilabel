@@ -1,4 +1,4 @@
-# AnotherDatabaseプラグイン
+# Multilabelプラグイン
 
 ## はじめに
 
